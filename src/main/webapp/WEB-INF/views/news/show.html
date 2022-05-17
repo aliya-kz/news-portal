@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Show</title>
+</head>
+<body>
+
+<p th:text="${news.getTitle()}">VALUE</p>
+<p th:text="${news.getBrief()}">VALUE</p>
+<p th:text="${news.getContent()}">VALUE</p>
+<p th:text="${news.getDate()}">VALUE</p>
+
+<a th:href="@{/news/{id}/edit(id=${news.getId()})}">[[#{edit}]]</a>
+
+<form th:method="DELETE" th:action="@{/news/{id}(id=${news.getId()})}">
+    <input type="submit" >[[#delete]]</input>
+</form>
+</body>
+</html>
