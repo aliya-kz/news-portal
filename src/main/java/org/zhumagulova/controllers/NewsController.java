@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import org.zhumagulova.dao.NewsDao;
 import org.zhumagulova.models.News;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Locale;
 
@@ -68,7 +67,7 @@ public class NewsController {
     public String update(@ModelAttribute("news") @Valid News news,
                          BindingResult bindingResult, @PathVariable("id") int id) {
         if (bindingResult.hasErrors()) {
-            return "news/{id}/edit";
+            return "news/edit";
         }
         Locale locale = LocaleContextHolder.getLocale();
         String langCode = locale.getLanguage();

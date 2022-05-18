@@ -30,7 +30,7 @@ public class NewsDao {
         return jdbcTemplate.query("SELECT * from news_lang where language = ?", new Object[]{languageId}, new BeanPropertyRowMapper<>(News.class));
     }
 
-    public News show(int id, String langCode) {
+    public News show(long id, String langCode) {
         long languageId = languageDao.getIdByLanguageCode(langCode);
         return jdbcTemplate.query("SELECT n.date, nl.* from news n left join news_lang nl on n.id=nl.id where n.id = ? and language = ?", new Object[]{id, languageId}, new BeanPropertyRowMapper<>(News.class))
                 .stream().findAny().orElse(null);

@@ -10,7 +10,7 @@
     </Appenders>
     <Loggers>
         <Logger name="org.springframework.jdbc.core.JdbcTemplate" level="TRACE" additivity="false">
-            <Appender-Ref ref="db" />
+            <Appender-Ref ref="MyFile" />
         </Logger>
     </Loggers>
 </Configuration>
