@@ -4,7 +4,7 @@
         <Console name="CONSOLE_OUT">
             <PatternLayout pattern="LOG4J %d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
         </Console>
-        <File name="MyFile" fileName="D:/news-portal/src/main/java/org.zhumagulova/log/log.log" immediateFlush="false" append="true">
+        <File name="MyFile" fileName="D:/news-portal/src/log/log.log" immediateFlush="false" append="true">
             <PatternLayout pattern="%d{yyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </File>
     </Appenders>

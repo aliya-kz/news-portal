@@ -66,7 +66,7 @@ public class SpringConfig implements WebMvcConfigurer {
     @Bean
     public MessageSource messageSource() {
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-        messageSource.setBasename("content");
+        messageSource.setBasename("messages");
         messageSource.setFallbackToSystemLocale(false);
         messageSource.setCacheSeconds(0);
         messageSource.setDefaultEncoding("UTF-8");
@@ -92,7 +92,6 @@ public class SpringConfig implements WebMvcConfigurer {
     @Bean
     public LocaleChangeInterceptor localeChangeInterceptor() {
         LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
-        localeChangeInterceptor.setParamName("language");
         return localeChangeInterceptor;
     }
 

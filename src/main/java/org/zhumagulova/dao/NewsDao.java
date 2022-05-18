@@ -26,6 +26,7 @@ public class NewsDao {
 
     public List<News> index(String langCode) {
         long languageId = languageDao.getIdByLanguageCode(langCode);
+        System.out.println("index " + langCode);
         return jdbcTemplate.query("SELECT * from news_lang where language = ?", new Object[]{languageId}, new BeanPropertyRowMapper<>(News.class));
     }
 
@@ -53,7 +54,7 @@ public class NewsDao {
                 languageId);
     }
 
-    public void delete(int id) {
+    public void delete(long id) {
         jdbcTemplate.update("DELETE from news where id = ?", id);
     }
 }

@@ -5,6 +5,17 @@
     <title>All news</title>
 </head>
 <body>
+
+<header>
+    <ul class="lang-bar">
+        <li>
+            <a class="lang" th:href="@{?locale=en}">[[#{English}]]</a>
+        </li>
+        <li>
+            <a class="lang" th:href="@{?locale=ru}">[[#{Russian}]]</a>
+        </li>
+    </ul>
+</header>
 <div th:each="news : ${all_news}">
     <a th:href="@{/news/{id}(id=${news.getId()})}"
        th:text="${news.getTitle()}">Title</a>

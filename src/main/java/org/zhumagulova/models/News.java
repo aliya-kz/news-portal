@@ -22,9 +22,9 @@ public class News {
     private String content;
 
     @Min(value = 1, message = "Language id should be not less than 1")
-    private int language;
+    private long language;
 
-    public News(long id, long news_id, Date date, String title, String brief, String content, int language) {
+    public News(long id, long news_id, Date date, String title, String brief, String content, long language) {
         this.id = id;
         this.news_id = news_id;
         this.title = title;
@@ -92,11 +92,11 @@ public class News {
         this.content = content;
     }
 
-    public int getLanguage() {
+    public long getLanguage() {
         return language;
     }
 
-    public void setLanguage(int language) {
+    public void setLanguage(long language) {
         this.language = language;
     }
 }

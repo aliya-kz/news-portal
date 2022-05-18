@@ -1,6 +1,7 @@
 package org.zhumagulova.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,16 +26,16 @@ public class NewsController {
     }
 
     @GetMapping()
-    public String index(Model model, HttpServletRequest request) {
-        Locale locale = request.getLocale();
+    public String index(Model model) {
+        Locale locale = LocaleContextHolder.getLocale();
         String langCode = locale.getLanguage();
         model.addAttribute("all_news", newsDao.index(langCode));
         return "news/index";
     }
 
     @GetMapping("/{id}")
-    public String show(@PathVariable("id") int id, Model model, HttpServletRequest request) {
-        Locale locale = request.getLocale();
+    public String show(@PathVariable("id") int id, Model model) {
+        Locale locale = LocaleContextHolder.getLocale();
         String langCode = locale.getLanguage();
         model.addAttribute("news", newsDao.show(id, langCode));
         return "news/show";
@@ -56,8 +57,8 @@ public class NewsController {
     }
 
     @GetMapping("/{id}/edit")
-    public String edit(Model model, @PathVariable("id") int id, HttpServletRequest request) {
-        Locale locale = request.getLocale();
+    public String edit(Model model,  @PathVariable("id") int id) {
+        Locale locale = LocaleContextHolder.getLocale();
         String langCode = locale.getLanguage();
         model.addAttribute("news", newsDao.show(id, langCode));
         return "news/edit";
@@ -65,11 +66,11 @@ public class NewsController {
 
     @PatchMapping("/{id}")
     public String update(@ModelAttribute("news") @Valid News news,
-                         BindingResult bindingResult, @PathVariable("id") int id, HttpServletRequest request) {
+                         BindingResult bindingResult, @PathVariable("id") int id) {
         if (bindingResult.hasErrors()) {
             return "news/{id}/edit";
         }
-        Locale locale = request.getLocale();
+        Locale locale = LocaleContextHolder.getLocale();
         String langCode = locale.getLanguage();
         newsDao.update(id, news, langCode);
         return "redirect:/news";
