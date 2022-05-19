@@ -28,7 +28,7 @@ public class NewsController {
     public String index(Model model) {
         Locale locale = LocaleContextHolder.getLocale();
         String langCode = locale.getLanguage();
-        model.addAttribute("all_news", newsDao.index(langCode));
+        model.addAttribute("all_news", newsDao.getAllNews(langCode));
         return "news/index";
     }
 
@@ -36,7 +36,7 @@ public class NewsController {
     public String show(@PathVariable("id") int id, Model model) {
         Locale locale = LocaleContextHolder.getLocale();
         String langCode = locale.getLanguage();
-        model.addAttribute("news", newsDao.show(id, langCode));
+        model.addAttribute("news", newsDao.getById(id, langCode));
         return "news/show";
     }
 
@@ -51,7 +51,7 @@ public class NewsController {
         if (bindingResult.hasErrors()) {
             return "news/new";
         }
-        newsDao.save(news);
+        newsDao.createNews(news);
         return "redirect:/news";
     }
 
@@ -59,7 +59,7 @@ public class NewsController {
     public String edit(Model model,  @PathVariable("id") int id) {
         Locale locale = LocaleContextHolder.getLocale();
         String langCode = locale.getLanguage();
-        model.addAttribute("news", newsDao.show(id, langCode));
+        model.addAttribute("news", newsDao.getById(id, langCode));
         return "news/edit";
     }
 

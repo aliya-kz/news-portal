@@ -1,13 +1,12 @@
 package org.zhumagulova.controllers;
 
-import org.junit.Before;
-import org.junit.Test;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.zhumagulova.dao.NewsDao;
 import org.zhumagulova.models.News;
@@ -22,7 +21,6 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest
 public class NewsControllerTest {
 
     @InjectMocks
@@ -35,7 +33,7 @@ public class NewsControllerTest {
 
     private String languageCode = "en";
 
-    @Before
+    @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(newsController).build();
@@ -47,11 +45,11 @@ public class NewsControllerTest {
         first.setTitle("test title");
         News second = new News();
         List<News> list = Arrays.asList(first, second);
-        when(newsDao.index(languageCode)).thenReturn((List)list);
+        when(newsDao.getAllNews(languageCode)).thenReturn((List)list);
 
         mockMvc.perform(get("/news"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("news/index"))
+                .andExpect(view().name("news/getAllNews"))
                 .andExpect(model().attribute("all_news", hasItems(first)));
     }
 
@@ -60,11 +58,11 @@ public class NewsControllerTest {
         long id = 5;
         News testNews = new News();
         testNews.setId(id);
-        when(newsDao.show(id, languageCode)).thenReturn(testNews);
+        when(newsDao.getById(id, languageCode)).thenReturn(testNews);
 
         mockMvc.perform(get("/news/5"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("news/show"))
+                .andExpect(view().name("news/getById"))
                 .andExpect(model().attribute("news", instanceOf(News.class)));
     }
 

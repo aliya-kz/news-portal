@@ -5,7 +5,6 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.zhumagulova.logger.StaticLogClass;
 import org.zhumagulova.models.News;
 
 
@@ -24,20 +23,20 @@ public class NewsDao {
         this.languageDao = languageDao;
     }
 
-    public List<News> index(String langCode) {
+    public List<News> getAllNews(String langCode) {
         long languageId = languageDao.getIdByLanguageCode(langCode);
-        System.out.println("index " + langCode);
+        System.out.println("getAllNews " + langCode);
         return jdbcTemplate.query("SELECT * from news_lang where language = ?", new Object[]{languageId}, new BeanPropertyRowMapper<>(News.class));
     }
 
-    public News show(long id, String langCode) {
+    public News getById(long id, String langCode) {
         long languageId = languageDao.getIdByLanguageCode(langCode);
         return jdbcTemplate.query("SELECT n.date, nl.* from news n left join news_lang nl on n.id=nl.id where n.id = ? and language = ?", new Object[]{id, languageId}, new BeanPropertyRowMapper<>(News.class))
                 .stream().findAny().orElse(null);
     }
 
     @Transactional
-    public void save(News news) {
+    public void createNews(News news) {
         Date currentDate = new Date(new java.util.Date().getTime());
 
         jdbcTemplate.update("INSERT into news values (?)",currentDate);
