@@ -21,6 +21,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+
 public class NewsControllerTest {
 
     @InjectMocks
@@ -42,7 +43,6 @@ public class NewsControllerTest {
     @Test
     public void index() throws Exception {
         News first = new News();
-        first.setTitle("test title");
         News second = new News();
         List<News> list = Arrays.asList(first, second);
         when(newsDao.getAllNews(languageCode)).thenReturn((List)list);
@@ -62,16 +62,21 @@ public class NewsControllerTest {
 
         mockMvc.perform(get("/news/5"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("news/getById"))
+                .andExpect(view().name("news/show"))
                 .andExpect(model().attribute("news", instanceOf(News.class)));
     }
 
     @Test
-    public void newNews() {
+    public void newNews() throws Exception {
+        mockMvc.perform(get("/news/new"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("news/new"))
+                .andExpect(model().attribute("news", instanceOf(News.class)));
     }
 
     @Test
     public void create() {
+
     }
 
     @Test

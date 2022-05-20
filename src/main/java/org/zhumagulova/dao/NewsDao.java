@@ -11,7 +11,7 @@ import org.zhumagulova.models.News;
 import java.sql.Date;
 import java.util.List;
 
-@Component
+@Component ("newsDao")
 public class NewsDao {
 
     private final JdbcTemplate jdbcTemplate;
