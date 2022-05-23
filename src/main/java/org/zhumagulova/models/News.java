@@ -2,11 +2,14 @@ package org.zhumagulova.models;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
-import java.sql.Date;
+import java.time.LocalDate;
+
 
 @Entity
+@Table(name="news")
 public class News {
 
     @Column(name="id")
@@ -16,7 +19,7 @@ public class News {
     private long newsId;
 
     @Column(name="date")
-    private Date date;
+    private LocalDate date;
 
     @Column(name="title")
     @Size(min = 2, max = 100, message = "Title should be from 2 to 100 characters")
@@ -34,40 +37,98 @@ public class News {
     @Min(value = 1, message = "Language id should be not less than 1")
     private long language;
 
-    public News(long id, long news_id, Date date, String title, String brief, String content, long language) {
-        this.id = id;
-        this.newsId = news_id;
-        this.title = title;
-        this.brief = brief;
-        this.content = content;
-        this.language = language;
-        this.date = date;
+    public News() {
+    }
+/*
+    public static class Builder {
+        private long id;
+        private long newsId;
+        private LocalDate date;
+        private String title;
+        private String brief;
+        private String content;
+        private long language;
+
+        public Builder id (long id) {
+            this.id = id;
+            return this;
+        }
+        public Builder newsId (long newsId) {
+            this.newsId = newsId;
+            return this;
+        }
+
+        public Builder date (LocalDate date) {
+            this.date = date;
+            return this;
+        }
+
+        public Builder title(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public Builder brief(String brief) {
+            this.brief = brief;
+            return this;
+        }
+
+        public Builder content (String content) {
+            this.content = content;
+            return this;
+        }
+
+        public Builder language (long id) {
+            this.language = language;
+            return this;
+        }
+
+        public News build() {
+            return new News(this);
+        }
     }
 
-    public News(Date date,String title, String brief, String content, int language) {
-        this.date=date;
-        this.title = title;
-        this.brief = brief;
-        this.content = content;
-        this.language = language;
+    public News (Builder builder) {
+        id = builder.id;
+        newsId = builder.newsId;
+        date = builder.date;
+        title = builder.title;
+        brief = builder.brief;
+        content = builder.content;
+        language = builder.language;
     }
-
-    public News() {}
-
-    public long getNewsId() {
-        return newsId;
-    }
+*/
 
     public void setNewsId(long newsId) {
         this.newsId = newsId;
     }
 
-    public Date getDate() {
-        return date;
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setBrief(String brief) {
+        this.brief = brief;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public void setLanguage(long language) {
+        this.language = language;
+    }
+
+    public long getNewsId() {
+        return newsId;
+    }
+
+    public LocalDate getDate() {
+        return date;
     }
 
     public long getId() {
@@ -82,31 +143,16 @@ public class News {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getBrief() {
         return brief;
-    }
-
-    public void setBrief(String brief) {
-        this.brief = brief;
     }
 
     public String getContent() {
         return content;
     }
 
-    public void setContent(String content) {
-        this.content = content;
-    }
-
     public long getLanguage() {
         return language;
     }
 
-    public void setLanguage(long language) {
-        this.language = language;
-    }
 }

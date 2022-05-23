@@ -3,10 +3,10 @@ package org.zhumagulova.dao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import org.zhumagulova.models.News;
 
-@Component
+@Repository
 public class LanguageDao {
 
     private final JdbcTemplate jdbcTemplate;

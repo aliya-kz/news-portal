@@ -3,13 +3,17 @@ package org.zhumagulova.controllers;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.zhumagulova.dao.NewsDao;
 import org.zhumagulova.models.News;
+import org.zhumagulova.service.NewsService;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,22 +25,20 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-
 public class NewsControllerTest {
 
     @InjectMocks
     private NewsController newsController;
 
     @Mock
-    private NewsDao newsDao;
+    private NewsService newsService;
 
     private MockMvc mockMvc;
 
-    private String languageCode = "en";
+    private long languageId = 1;
 
     @BeforeEach
     public void setup() {
-        MockitoAnnotations.initMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(newsController).build();
     }
 
@@ -45,11 +47,11 @@ public class NewsControllerTest {
         News first = new News();
         News second = new News();
         List<News> list = Arrays.asList(first, second);
-        when(newsDao.getAllNews(languageCode)).thenReturn((List)list);
+        when(newsService.getAllNews()).thenReturn((List)list);
 
         mockMvc.perform(get("/news"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("news/getAllNews"))
+                .andExpect(view().name("news/index"))
                 .andExpect(model().attribute("all_news", hasItems(first)));
     }
 
@@ -58,7 +60,7 @@ public class NewsControllerTest {
         long id = 5;
         News testNews = new News();
         testNews.setId(id);
-        when(newsDao.getById(id, languageCode)).thenReturn(testNews);
+        when(newsService.getNewsById(id)).thenReturn(testNews);
 
         mockMvc.perform(get("/news/5"))
                 .andExpect(status().isOk())
