@@ -1,5 +1,6 @@
 package org.zhumagulova.config;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -10,9 +11,20 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ResourceBundleMessageSource;
+
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.JpaVendorAdapter;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -27,27 +39,30 @@ import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
 import javax.sql.DataSource;
 import java.util.Locale;
+import java.util.Properties;
 
-
+@EnableJpaRepositories
 @Configuration
-@ComponentScan ("org.zhumagulova")
+@ComponentScan("org.zhumagulova")
 @EnableWebMvc
+@EnableTransactionManagement
 @PropertySource(value = "classpath:/connection.properties")
-
 public class SpringConfig implements WebMvcConfigurer {
+
     private final ApplicationContext applicationContext;
+
     private final String suffix = ".html";
-    private final String  prefix = "/WEB-INF/views/";
-    @Value ("${db.driverClassName}")
+    private final String prefix = "/WEB-INF/views/";
+    @Value("${db.driverClassName}")
     private String driverName;
 
-    @Value ("${db.url}")
+    @Value("${db.url}")
     private String url;
 
-    @Value ("${db.username}")
+    @Value("${db.username}")
     private String username;
 
-    @Value ("${db.passwordEnvVariableName}")
+    @Value("${db.passwordEnvVariableName}")
     private String password;
 
 
@@ -108,7 +123,41 @@ public class SpringConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public LocaleResolver localeResolver () {
+    LocalContainerEntityManagerFactoryBean entityManagerFactoryBean() {
+        LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
+        entityManagerFactoryBean.setDataSource(datasource());
+        entityManagerFactoryBean.setPackagesToScan(new String[]{"org.zhumagulova.models"});
+        JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        entityManagerFactoryBean.setJpaVendorAdapter(vendorAdapter);
+        entityManagerFactoryBean.setJpaProperties(hibernateProperties());
+        return entityManagerFactoryBean;
+    }
+
+    private Properties hibernateProperties() {
+        Properties hibernateProperties = new Properties();
+        hibernateProperties.setProperty(
+                "hibernate.hbm2ddl.auto", "create-drop");
+        hibernateProperties.setProperty(
+                "hibernate.dialect", "org.hibernate.dialect.PostgreSQL92Dialect");
+        return hibernateProperties;
+    }
+
+
+    @Bean
+    public PlatformTransactionManager getTransactionManager() {
+        JpaTransactionManager transactionManager = new JpaTransactionManager();
+        transactionManager.setEntityManagerFactory(entityManagerFactoryBean().getObject());
+        return transactionManager;
+    }
+
+    @Bean
+    PersistenceExceptionTranslationPostProcessor exceptionTranslationPostProcessor() {
+        return new PersistenceExceptionTranslationPostProcessor();
+
+    }
+
+    @Bean
+    public LocaleResolver localeResolver() {
         SessionLocaleResolver localeResolver = new SessionLocaleResolver();
         localeResolver.setDefaultLocale(Locale.US);
         return localeResolver;
@@ -124,11 +173,5 @@ public class SpringConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(localeChangeInterceptor());
     }
-
-    @Bean
-    public JdbcTemplate jdbcTemplate () {
-        return new JdbcTemplate(datasource());
-    }
-
 
 }

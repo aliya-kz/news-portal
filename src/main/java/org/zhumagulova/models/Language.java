@@ -1,26 +1,33 @@
 package org.zhumagulova.models;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+
+@Entity
+@Table(name="languages")
 public class Language {
-    @Min(value = 1, message = "Language id should be not less than 1")
-    private int id;
+    @Id
+    private long id;
 
     @Size(min = 2, max = 2, message = "Language code should be 2 characters")
     private String code;
+
+    public Language() {}
 
     public Language(String code) {
         this.code = code;
     }
 
-    public Language() {}
-
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
