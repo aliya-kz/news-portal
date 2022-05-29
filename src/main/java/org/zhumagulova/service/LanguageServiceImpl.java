@@ -21,6 +21,7 @@ public class LanguageServiceImpl implements LanguageService{
     public long getLanguageIdByLocale() {
         Locale locale = LocaleContextHolder.getLocale();
         String langCode = locale.getLanguage();
+        System.out.println("lang id " + languageRepo.getIdByCode(langCode));
         return languageRepo.getIdByCode(langCode);
     }
 }

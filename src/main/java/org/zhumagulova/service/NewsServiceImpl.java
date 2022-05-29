@@ -20,8 +20,8 @@ public class NewsServiceImpl implements NewsService {
     @Override
     @Transactional
     public List<News> getAllNews() {
-
-        return (List<News>) newsRepo.findAll();
+        System.out.println("newsRepo  size " + newsRepo.findAll().size());
+        return newsRepo.findAll();
     }
 
     @Override

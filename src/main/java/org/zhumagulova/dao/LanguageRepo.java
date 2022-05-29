@@ -7,6 +7,5 @@ import org.zhumagulova.models.Language;
 
 @Repository
 public interface LanguageRepo extends JpaRepository<Language, Long> {
-    //TODO query
     long getIdByCode(String code);
 }

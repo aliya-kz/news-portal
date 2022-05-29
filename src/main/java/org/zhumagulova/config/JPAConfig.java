@@ -65,7 +65,6 @@ public class JPAConfig {
         final DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(env.getProperty("db.driverClassName"));
         dataSource.setUrl(env.getProperty("db.url"));
-        System.out.println(env.getProperty("db.url"));
         dataSource.setUsername(env.getProperty("db.username"));
         dataSource.setPassword(System.getenv(env.getProperty("db.passwordEnvVariableName")));
         return dataSource;

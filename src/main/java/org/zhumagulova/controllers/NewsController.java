@@ -29,7 +29,6 @@ public class NewsController {
     @GetMapping
     public String index(Model model) {
         List<News> allNews = newsService.getAllNews();
-        //System.out.println(allNews.size() + " " + allNews.get(0).getContent()) ;
         model.addAttribute("all_news", allNews);
         return "news/index";
     }

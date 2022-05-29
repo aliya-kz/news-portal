@@ -13,7 +13,7 @@ public class News {
     @Column(name = "id")
     private Long id;
 
-    @OneToMany(mappedBy="news")
+   @OneToMany(mappedBy="news")
     private Set<LocalizedNews> localizedNewsSet;
 
     @Column(name="date")
@@ -30,11 +30,11 @@ public class News {
         this.id = id;
     }
 
-    public Set<LocalizedNews> getLocalizedNewsSet() {
+   public Set<LocalizedNews> getLocalizedNewsSet() {
         return localizedNewsSet;
     }
 
-    public void setLocalizedNewsSet(Set<LocalizedNews> localizedNewsSet) {
+   public void setLocalizedNewsSet(Set<LocalizedNews> localizedNewsSet) {
         this.localizedNewsSet = localizedNewsSet;
     }
 
