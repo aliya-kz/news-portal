@@ -1,11 +1,10 @@
 package org.zhumagulova.models;
 
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Size;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
 
 @Entity

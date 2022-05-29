@@ -1,15 +1,15 @@
 package org.zhumagulova.models;
 
 
-import jakarta.validation.constraints.Size;
-
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name="news_translations")
 public class LocalizedNews {
 
     @Id
+    @Column (name="id")
 private Long id;
 
     @Column(name="title")

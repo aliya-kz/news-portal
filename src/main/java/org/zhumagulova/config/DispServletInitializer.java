@@ -1,22 +1,24 @@
 package org.zhumagulova.config;
 
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+
+
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 
 public class DispServletInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return null;
+        return new Class[] {JPAConfig.class};
     }
 
     @Override
     protected Class<?>[] getServletConfigClasses() {
-        return new Class[] {SpringConfig.class};
+        return new Class[] {WebMvcConfig.class};
     }
 
     @Override

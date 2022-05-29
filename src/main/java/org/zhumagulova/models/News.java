@@ -1,9 +1,5 @@
 package org.zhumagulova.models;
 
-
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Size;
-
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Set;
@@ -13,6 +9,8 @@ import java.util.Set;
 @Table(name="news")
 public class News {
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     @OneToMany(mappedBy="news")
@@ -24,5 +22,27 @@ public class News {
     public News() {
     }
 
+    public Long getId() {
+        return id;
+    }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Set<LocalizedNews> getLocalizedNewsSet() {
+        return localizedNewsSet;
+    }
+
+    public void setLocalizedNewsSet(Set<LocalizedNews> localizedNewsSet) {
+        this.localizedNewsSet = localizedNewsSet;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
 }
