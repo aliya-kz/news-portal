@@ -1,21 +1,19 @@
 package org.zhumagulova.service;
 
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import org.zhumagulova.models.News;
 
+import org.zhumagulova.models.LocalizedNews;
 import java.util.List;
 
 
 public interface NewsService {
 
-    List<News> getAllNews();
+    List<LocalizedNews> getAllNews();
 
-    News getNewsById(long id);
+    LocalizedNews getNewsById(long id);
 
-    void createNews(News news);
+    void createNews(LocalizedNews news);
 
-    void updateNews(News news, long id);
+    void updateNews(LocalizedNews news, long id);
 
     void deleteById(long id);
 }

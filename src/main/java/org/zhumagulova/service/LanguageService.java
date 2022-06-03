@@ -1,9 +1,11 @@
 package org.zhumagulova.service;
 
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
+import org.zhumagulova.models.Language;
+import java.util.List;
 
-@Service
+
 public interface LanguageService {
     long getLanguageIdByLocale();
+
+    List<Language> getAll();
 }

@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.zhumagulova.dao.LanguageRepo;
+import org.zhumagulova.models.Language;
 
+import java.util.List;
 import java.util.Locale;
 
 @Service
@@ -17,11 +19,16 @@ public class LanguageServiceImpl implements LanguageService{
         this.languageRepo = languageRepo;
     }
 
+
     @Override
     public long getLanguageIdByLocale() {
         Locale locale = LocaleContextHolder.getLocale();
         String langCode = locale.getLanguage();
-        System.out.println("lang id " + languageRepo.getIdByCode(langCode));
         return languageRepo.getIdByCode(langCode);
+    }
+
+    @Override
+    public List<Language> getAll() {
+        return languageRepo.getAll();
     }
 }

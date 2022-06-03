@@ -3,10 +3,12 @@ package org.zhumagulova.controllers;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.zhumagulova.models.LocalizedNews;
 import org.zhumagulova.models.News;
 import org.zhumagulova.service.NewsService;
 
@@ -19,7 +21,8 @@ import java.util.List;
 
 public class NewsController {
 
-    private final NewsService newsService;
+    @Qualifier ("newsServiceImpl")
+    private NewsService newsService;
 
     @Autowired
     public NewsController(NewsService newsService) {
@@ -28,25 +31,25 @@ public class NewsController {
 
     @GetMapping
     public String index(Model model) {
-        List<News> allNews = newsService.getAllNews();
+        List<LocalizedNews> allNews = newsService.getAllNews();
         model.addAttribute("all_news", allNews);
         return "news/index";
     }
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
-        News news = newsService.getNewsById(id);
+        LocalizedNews news = newsService.getNewsById(id);
         model.addAttribute("news", news);
         return "news/show";
     }
 
     @GetMapping("/new")
-    public String newNews(@ModelAttribute("news") News news) {
+    public String newNews(@ModelAttribute("news") LocalizedNews news) {
         return "news/new";
     }
 
     @PostMapping
-    public String create(@ModelAttribute("news") @Valid News news,
+    public String create(@ModelAttribute("news") @Valid LocalizedNews news,
                          BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "news/new";
@@ -62,7 +65,7 @@ public class NewsController {
     }
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("news") @Valid News news,
+    public String update(@ModelAttribute("news") @Valid LocalizedNews news,
                          BindingResult bindingResult, @PathVariable("id") int id) {
         if (bindingResult.hasErrors()) {
             return "news/edit";

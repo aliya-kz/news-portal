@@ -1,46 +1,46 @@
 package org.zhumagulova.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.zhumagulova.dao.NewsRepo;
-import org.zhumagulova.models.News;
+import org.zhumagulova.models.LocalizedNews;
+
 
 import java.util.List;
-import java.util.Optional;
-
 
 @Service
 public class NewsServiceImpl implements NewsService {
+
     @Autowired
+    @Qualifier ("newsRepoImpl")
     private NewsRepo newsRepo;
+
     @Autowired
     private LanguageService languageService;
 
     @Override
     @Transactional
-    public List<News> getAllNews() {
-        System.out.println("newsRepo  size " + newsRepo.findAll().size());
-        return newsRepo.findAll();
+    public List<LocalizedNews> getAllNews() {
+
+        return newsRepo.getAllNews();
     }
 
     @Override
     @Transactional
-    public News getNewsById(long id) {
-        Optional<News> found = newsRepo.findById(id);
-        if (found.isEmpty()) return null;
-        else return found.get();
+    public LocalizedNews getNewsById(long id) {
+     return null;
     }
 
     @Override
-    @Transactional
-    public void createNews(News news) {
-        newsRepo.save(news);
+    public void createNews(LocalizedNews news) {
+
     }
 
+
     @Override
-    @Transactional
-    public void updateNews(News news, long id) {
+    public void updateNews(LocalizedNews news, long id) {
 
         long languageId = languageService.getLanguageIdByLocale();
     }
@@ -48,6 +48,6 @@ public class NewsServiceImpl implements NewsService {
     @Override
     @Transactional
     public void deleteById(long id) {
-        newsRepo.deleteById(id);
+
     }
 }

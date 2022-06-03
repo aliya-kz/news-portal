@@ -1,7 +1,6 @@
 package org.zhumagulova.models;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.util.Set;
 
 
@@ -16,8 +15,6 @@ public class News {
    @OneToMany(mappedBy="news")
     private Set<LocalizedNews> localizedNewsSet;
 
-    @Column(name="date")
-    private LocalDate date;
 
     public News() {
     }
@@ -38,11 +35,4 @@ public class News {
         this.localizedNewsSet = localizedNewsSet;
     }
 
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
 }
