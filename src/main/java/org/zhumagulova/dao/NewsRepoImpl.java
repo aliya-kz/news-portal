@@ -10,6 +10,8 @@ import org.springframework.stereotype.Repository;
 import org.zhumagulova.models.LocalizedNews;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Repository
 public class NewsRepoImpl implements NewsRepo {
@@ -19,22 +21,28 @@ public class NewsRepoImpl implements NewsRepo {
     private SessionFactory sessionFactory;
 
     @Override
-    public List<LocalizedNews> getAllNews() {
+    public List<LocalizedNews> getAllNews(long languageId) {
         Session session = sessionFactory.getCurrentSession();
-        String hql = "FROM LocalizedNews";
-        Query query = session.createQuery(hql);
-        List results = query.list();
+        String hql = "select ln from LocalizedNews ln where ln.language.id = :langId";
+        Query query =  session.createQuery(hql);
+        query.setParameter("langId", languageId);
+        List <LocalizedNews> results = query.list();
         return results;
     }
 
     @Override
     public void saveNews(LocalizedNews news) {
-
     }
 
     @Override
-    public LocalizedNews getNews(long id) {
-        return null;
+    public LocalizedNews getNewsById(long id, long languageId) {
+        Session session = sessionFactory.getCurrentSession();
+        String hql = "select ln from LocalizedNews ln where ln.news.id = :id and ln.language.id = :langId";
+        Query query =  session.createQuery(hql);
+        query.setParameter("id", id);
+        query.setParameter("langId", languageId);
+       Optional<LocalizedNews> result = query.uniqueResultOptional();
+        return result.orElseThrow(NoSuchElementException::new);
     }
 
     @Override

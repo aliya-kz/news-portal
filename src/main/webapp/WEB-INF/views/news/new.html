@@ -5,7 +5,7 @@
     <title>New news</title>
 </head>
 <body>
-
+<header th:insert="news/header.html :: header"> </header>
 <form th:method="POST" th:action="@{/news}" th:object="${news}">
     <label for="title">Enter title: </label>
     <input type="text" th:field="*{title}" id="title"/>

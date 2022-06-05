@@ -3,11 +3,12 @@ package org.zhumagulova.models;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "localized_news")
-public class LocalizedNews {
+public class LocalizedNews implements Serializable {
 
     @Id
     @Column(name = "id")
@@ -28,7 +29,7 @@ public class LocalizedNews {
     @Size(min = 20, max = 5000, message = "Content should be from 20 to 3000 characters")
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "news_id")
     private News news;
 
@@ -93,5 +94,9 @@ public class LocalizedNews {
 
     public void setLanguage(Language language) {
         this.language = language;
+    }
+
+    public long getNewsId () {
+        return this.news.getId();
     }
 }

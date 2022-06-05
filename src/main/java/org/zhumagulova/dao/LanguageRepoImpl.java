@@ -7,9 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.zhumagulova.models.Language;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
+
 import java.util.List;
 
 @Repository
@@ -19,18 +17,22 @@ public class LanguageRepoImpl implements LanguageRepo {
     private SessionFactory sessionFactory;
 
     @Override
-    public long getIdByCode(String code) {
-        return 0;
+
+    public long getIdByCode(String languageCode) {
+        Session session = sessionFactory.getCurrentSession();
+        String hql = "select l.id from Language l where l.code = :language_code";
+        Query query = session.createQuery(hql);
+        query.setParameter("language_code", languageCode);
+        List <Long> results = query.list();
+        return results.get(0);
     }
 
     @Override
     public List<Language> getAll() {
         Session session = sessionFactory.getCurrentSession();
-        CriteriaBuilder cb = session.getCriteriaBuilder();
-        CriteriaQuery< Language > cq = cb.createQuery(Language.class);
-        Root< Language > root = cq.from(Language.class);
-        cq.select(root);
-        Query query = session.createQuery(cq);
-        return query.getResultList();
+        String hql = "FROM Language AS L";
+        Query query = session.createQuery(hql);
+        List results = query.list();
+        return results;
     }
 }

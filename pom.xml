@@ -19,7 +19,7 @@
         <spring.version>5.3.20</spring.version>
         <javax.validation.version>2.0.1.Final</javax.validation.version>
         <hibernate.entityManager>5.6.9.Final</hibernate.entityManager>
-        <spring.jpa>2.7.0</spring.jpa>
+        <hibernate-validator.version>7.0.4.Final</hibernate-validator.version>
         <thymeleaf.version>3.1.0.M1</thymeleaf.version>
         <javax.servlet.version>4.0.1</javax.servlet.version>
         <postgre.version>42.3.5</postgre.version>
@@ -74,20 +74,19 @@
             <version>${hibernate.entityManager}</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.hibernate.validator/hibernate-validator -->
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${hibernate-validator.version}</version>
+        </dependency>
+
 
         <!-- https://mvnrepository.com/artifact/javax.validation/validation-api -->
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>
             <version>${javax.validation.version}</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.springframework/spring-test -->
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-jpa</artifactId>
-            <version>${spring.jpa}</version>
-            <scope>test</scope>
         </dependency>
 
              <!-- https://mvnrepository.com/artifact/org.thymeleaf/thymeleaf-spring5 -->

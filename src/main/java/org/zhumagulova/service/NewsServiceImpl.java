@@ -1,5 +1,9 @@
 package org.zhumagulova.service;
 
+
+import org.apache.logging.log4j.LogManager;
+
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -13,6 +17,8 @@ import java.util.List;
 @Service
 public class NewsServiceImpl implements NewsService {
 
+    private static final Logger logger = LogManager.getLogger("NewsServiceImpl");
+
     @Autowired
     @Qualifier ("newsRepoImpl")
     private NewsRepo newsRepo;
@@ -20,17 +26,19 @@ public class NewsServiceImpl implements NewsService {
     @Autowired
     private LanguageService languageService;
 
+
     @Override
     @Transactional
     public List<LocalizedNews> getAllNews() {
-
-        return newsRepo.getAllNews();
+        long languageId = languageService.getLanguageIdByLocale();
+        return newsRepo.getAllNews(languageId);
     }
 
     @Override
     @Transactional
     public LocalizedNews getNewsById(long id) {
-     return null;
+        long languageId = languageService.getLanguageIdByLocale();
+        return newsRepo.getNewsById(id, languageId);
     }
 
     @Override
@@ -41,7 +49,6 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public void updateNews(LocalizedNews news, long id) {
-
         long languageId = languageService.getLanguageIdByLocale();
     }
 
@@ -50,4 +57,5 @@ public class NewsServiceImpl implements NewsService {
     public void deleteById(long id) {
 
     }
+
 }

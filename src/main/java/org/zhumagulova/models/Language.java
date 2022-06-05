@@ -1,20 +1,23 @@
 package org.zhumagulova.models;
 
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
+import java.util.Set;
 
 
 @Entity
 @Table(name="languages")
-public class Language {
+public class Language implements Serializable {
     @Id
     private long id;
 
     @Size(min = 2, max = 2, message = "Language code should be 2 characters")
     private String code;
+
+    @OneToMany(mappedBy="language")
+    private Set<LocalizedNews> localizedNewsSet;
 
     public Language() {}
 
@@ -36,5 +39,13 @@ public class Language {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public Set<LocalizedNews> getLocalizedNewsSet() {
+        return localizedNewsSet;
+    }
+
+    public void setLocalizedNewsSet(Set<LocalizedNews> localizedNewsSet) {
+        this.localizedNewsSet = localizedNewsSet;
     }
 }
