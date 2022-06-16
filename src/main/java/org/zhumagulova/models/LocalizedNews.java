@@ -1,20 +1,36 @@
 package org.zhumagulova.models;
 
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "localized_news")
+@Table(name = "localized_news",
+        uniqueConstraints=
+        @UniqueConstraint(columnNames={"news_id", "language_id"}))
+@NamedNativeQuery(
+        name = "updateLocalizedNews",
+        query = "UPDATE localized_news ln set ln.title =? set ln.brief = ? set ln.content = ? where ln.id = ?",
+        resultClass=LocalizedNews.class
+)
+@NamedQuery(
+        name = "selectLocalizedNewsById",
+        query = "select ln from LocalizedNews ln where ln.news.id = :id and ln.language.id= :langId"
+)
 public class LocalizedNews implements Serializable {
 
     @Id
-    @Column(name = "id")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator="localized_news_seq_gen")
+    @SequenceGenerator(name="localized_news_seq_gen", sequenceName="localized_news_sequence", allocationSize = 1)
     private Long id;
 
     @Column(name = "date")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @NotNull
     private LocalDate date;
 
     @Column(name = "title")
@@ -22,11 +38,11 @@ public class LocalizedNews implements Serializable {
     private String title;
 
     @Column(name = "brief")
-    @Size(min = 10, max = 600, message = "Brief content should be from 10 to 600 characters")
+    @Size(min = 10, max = 500, message = "Brief content should be from 10 to 500 characters")
     private String brief;
 
     @Column(name = "content")
-    @Size(min = 20, max = 5000, message = "Content should be from 20 to 3000 characters")
+    @Size(min = 20, max = 2048, message = "Content should be from 20 to 2048 characters")
     private String content;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
@@ -96,7 +112,15 @@ public class LocalizedNews implements Serializable {
         this.language = language;
     }
 
-    public long getNewsId () {
-        return this.news.getId();
+    @Override
+    public String toString() {
+        return "LocalizedNews{" +
+                "id=" + id +
+                ", date=" + date +
+                ", title='" + title + '\'' +
+                ", brief='" + brief + '\'' +
+                ", content='" + content + '\'' +
+                ", news=" + news +
+                ", language=" + language +'}';
     }
 }

@@ -2,6 +2,7 @@ package org.zhumagulova.models;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.Set;
 
 
@@ -15,7 +16,6 @@ public class News implements Serializable {
 
    @OneToMany(mappedBy="news")
     private Set<LocalizedNews> localizedNewsSet;
-
 
     public News() {
     }
@@ -36,4 +36,16 @@ public class News implements Serializable {
         this.localizedNewsSet = localizedNewsSet;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        News news = (News) o;
+        return Objects.equals(id, news.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

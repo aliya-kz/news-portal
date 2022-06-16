@@ -8,13 +8,14 @@
 <header th:insert="news/header.html :: header"> </header>
 
 <div th:each="news : ${all_news}">
-    <a th:href="@{/news/{id}(id=${news.getNewsId()})}"
+    News Id: <p th:text="${news.getNews().getId()}">News Id</p>
+    <a th:href="@{/news/{id}(id=${news.getNews().getId()})}"
        th:text="${news.getTitle()}">Title</a>
 </div>
 
 <br/>
 
-<hr/>
+<br/>
 <a href="/news/new"> [[#{new}]]</a>
 
 </body>

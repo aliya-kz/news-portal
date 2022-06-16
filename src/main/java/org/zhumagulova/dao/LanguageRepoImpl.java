@@ -7,24 +7,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.zhumagulova.models.Language;
 
-
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+
 
 @Repository
 public class LanguageRepoImpl implements LanguageRepo {
 
+    private final SessionFactory sessionFactory;
+
     @Autowired
-    private SessionFactory sessionFactory;
+    public LanguageRepoImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     @Override
-
     public long getIdByCode(String languageCode) {
         Session session = sessionFactory.getCurrentSession();
-        String hql = "select l.id from Language l where l.code = :language_code";
-        Query query = session.createQuery(hql);
-        query.setParameter("language_code", languageCode);
-        List <Long> results = query.list();
-        return results.get(0);
+        List<Long> list = session.createQuery("SELECT l.id FROM Language l where l.code = :langCode" )
+                .setParameter("langCode", languageCode).list();
+        return list.get(0);
     }
 
     @Override
@@ -32,7 +35,15 @@ public class LanguageRepoImpl implements LanguageRepo {
         Session session = sessionFactory.getCurrentSession();
         String hql = "FROM Language AS L";
         Query query = session.createQuery(hql);
-        List results = query.list();
-        return results;
+        return query.list();
+    }
+
+    @Override
+    public Language getLanguageByCode(String code) {
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.getNamedNativeQuery("getLanguageByCode");
+        query.setParameter(1, code);
+        Optional<Language> result = query.uniqueResultOptional();
+        return result.orElseThrow(NoSuchElementException::new);
     }
 }

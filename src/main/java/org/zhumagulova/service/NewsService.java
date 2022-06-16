@@ -1,6 +1,7 @@
 package org.zhumagulova.service;
 
 
+import org.springframework.transaction.annotation.Transactional;
 import org.zhumagulova.models.LocalizedNews;
 import java.util.List;
 
@@ -11,9 +12,10 @@ public interface NewsService {
 
     LocalizedNews getNewsById(long id);
 
-    void createNews(LocalizedNews news);
+    long createNews(LocalizedNews news, long newsId);
 
     void updateNews(LocalizedNews news, long id);
 
-    void deleteById(long id);
+    @Transactional
+    void delete(long id);
 }

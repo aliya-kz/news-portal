@@ -12,7 +12,7 @@
 <p th:text="${news.getContent()}">VALUE</p>
 <p th:text="${news.getDate()}">VALUE</p>
 
-<a th:href="@{/news/{id}/edit(id=${news.getNewsId()})}">[[#{edit}]]</a>
+<a th:href="@{/news/{id}/edit(id=${news.getNews().getId()})}">[[#{edit}]]</a>
 
 <form th:method="DELETE" th:action="@{/news/{id}(id=${news.getId()})}">
     <input type="submit" >[[#{delete}]]</input>

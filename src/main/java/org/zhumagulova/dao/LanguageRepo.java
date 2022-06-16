@@ -8,5 +8,6 @@ import java.util.List;
 public interface LanguageRepo {
     long getIdByCode(String code);
     List<Language> getAll();
+    Language getLanguageByCode(String code);
 }
 

@@ -1,9 +1,8 @@
 package org.zhumagulova.controllers;
 
-
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,6 +11,7 @@ import org.zhumagulova.models.LocalizedNews;
 import org.zhumagulova.service.NewsService;
 
 import javax.validation.Valid;
+import java.sql.SQLException;
 import java.util.List;
 
 
@@ -20,8 +20,9 @@ import java.util.List;
 
 public class NewsController {
 
-    @Qualifier ("newsServiceImpl")
-    private NewsService newsService;
+    private static final Logger logger = LogManager.getLogger(NewsController.class);
+
+    private final NewsService newsService;
 
     @Autowired
     public NewsController(NewsService newsService) {
@@ -49,23 +50,27 @@ public class NewsController {
 
     @PostMapping
     public String create(@ModelAttribute("news") @Valid LocalizedNews news,
-                         BindingResult bindingResult) {
+                         BindingResult bindingResult, @RequestParam String newsId) {
+        logger.info("printing newsId in controller:" + newsId);
         if (bindingResult.hasErrors()) {
-            return "news/new";
+            return "news/error";
         }
-        newsService.createNews(news);
+        long id = (newsId.length() < 1) ? 0 : Long.parseLong(newsId);
+        newsService.createNews(news, id);
         return "redirect:/news";
     }
 
     @GetMapping("/{id}/edit")
-    public String edit(Model model, @PathVariable("id") int id) {
+    public String edit(Model model, @PathVariable("id") long id) {
         model.addAttribute("news", newsService.getNewsById(id));
         return "news/edit";
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/{id}/edit")
     public String update(@ModelAttribute("news") @Valid LocalizedNews news,
-                         BindingResult bindingResult, @PathVariable("id") int id) {
+                         BindingResult bindingResult, @PathVariable("id") long id) {
+        logger.info("printing patch id :" + id);
+        logger.info("printing patch news title :" + news.getTitle());
         if (bindingResult.hasErrors()) {
             return "news/edit";
         }
@@ -74,8 +79,13 @@ public class NewsController {
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") int id) {
-        newsService.deleteById(id);
+    public String delete( @PathVariable("id") long id) {
+        newsService.delete(id);
         return "redirect:/news";
+    }
+
+    @ExceptionHandler(Exception.class)
+    public String error() {
+        return "news/error";
     }
 }
