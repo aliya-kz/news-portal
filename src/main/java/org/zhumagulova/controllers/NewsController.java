@@ -2,6 +2,7 @@ package org.zhumagulova.controllers;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +12,7 @@ import org.zhumagulova.models.LocalizedNews;
 import org.zhumagulova.service.NewsService;
 
 import javax.validation.Valid;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -75,13 +77,21 @@ public class NewsController {
     }
 
     @DeleteMapping("/{id}")
-    public String delete( @PathVariable("id") long id) {
+    public String deleteOneNews( @PathVariable("id") long id) {
         newsService.delete(id);
         return "redirect:/news";
     }
 
+    @DeleteMapping
+    public String delete( @RequestParam String [] ids) {
+        logger.info ("printing ids " + ids.length);
+        Arrays.stream(ids).map(Long::valueOf)
+                        .forEach(id->newsService.delete(id));
+        return "redirect:/news";
+    }
 
-    @ExceptionHandler(Exception.class)
+
+    @ExceptionHandler(PSQLException.class)
     public String error() {
         return "news/error";
     }

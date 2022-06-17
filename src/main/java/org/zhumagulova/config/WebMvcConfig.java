@@ -37,6 +37,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     private final String suffix = ".html";
     private final String prefix = "/WEB-INF/views/";
+    private final String encoding = "UTF-8";
 
     public WebMvcConfig(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
@@ -49,6 +50,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         templateResolver.setApplicationContext(applicationContext);
         templateResolver.setPrefix(prefix);
         templateResolver.setSuffix(suffix);
+        templateResolver.setCharacterEncoding(encoding);
         return templateResolver;
     }
 
@@ -72,6 +74,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         ThymeleafViewResolver resolver = new ThymeleafViewResolver();
         resolver.setTemplateEngine(templateEngine());
         registry.viewResolver(resolver);
+        resolver.setCharacterEncoding(encoding);
     }
 
     @Bean
@@ -80,7 +83,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         messageSource.setBasename("messages");
         messageSource.setFallbackToSystemLocale(false);
         messageSource.setCacheSeconds(0);
-        messageSource.setDefaultEncoding("UTF-8");
+        messageSource.setDefaultEncoding(encoding);
         return messageSource;
     }
 

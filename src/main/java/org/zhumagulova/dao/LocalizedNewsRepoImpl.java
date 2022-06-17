@@ -50,10 +50,11 @@ public class LocalizedNewsRepoImpl implements LocalizedNewsRepo {
         Session session = sessionFactory.getCurrentSession();
         Query query = session.getNamedNativeQuery("updateLocalizedNews");
         query.setParameter(1, news.getTitle());
-        query.setParameter(2, news.getBrief());
-        query.setParameter(3, news.getContent());
-        query.setParameter(4, news.getNews().getId());
-        query.setParameter(5, news.getLanguage().getId());
+        query.setParameter(2, news.getDate());
+        query.setParameter(3, news.getBrief());
+        query.setParameter(4, news.getContent());
+        query.setParameter(5, news.getNews().getId());
+        query.setParameter(6, news.getLanguage().getId());
         query.executeUpdate();
     }
 

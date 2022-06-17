@@ -7,16 +7,27 @@
 <body>
 <header th:insert="news/header.html :: header"> </header>
 
+
+<form th:method="DELETE" th:action="@{/news}">
+
 <div th:each="news : ${all_news}">
-    News Id: <p th:text="${news.getNews().getId()}">News Id</p>
-    <a th:href="@{/news/{id}(id=${news.getNews().getId()})}"
-       th:text="${news.getTitle()}">Title</a>
+    <div>
+        Id: <p th:text="${news.getNews().getId()}">Id</p>
+        <h2 th:text="${news.getTitle()}">[[#{title}]]</h2>
+        <p th:text="${news.getBrief()}">[[#{brief}]]</p>
+        <p th:text="${news.getDate()}">[[#{date}]]</p>
+
+        <a th:href="@{/news/{id}(id=${news.getNews().getId()})}">[[#{view}]]</a>
+        <a th:href="@{/news/{id}/edit(id=${news.getNews().getId()})}">[[#{edit}]]</a>
+
+        <input type="checkbox" name="ids" th:value="${news.id}">
+    </div>
+    </br>
+
 </div>
-
+    <button type="submit">[[#{delete}]]</button>
+</form>
 <br/>
-
-<br/>
-<a href="/news/new"> [[#{new}]]</a>
 
 </body>
 </html>

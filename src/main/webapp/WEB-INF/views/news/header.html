@@ -6,6 +6,8 @@
 </head>
 <body>
 <div th:fragment="header">
+    <h1>[[#{news_management}]]</h1>
+    <h2>[[#{news}]]</h2>
     <ul class="lang-bar">
         <li>
             <a class="lang" th:href="@{?locale=en}">[[#{English}]]</a>
@@ -14,6 +16,11 @@
             <a class="lang" th:href="@{?locale=ru}">[[#{Russian}]]</a>
         </li>
     </ul>
+</br>
+    <div>
+        <a th:href="@{/news}">[[#{news_list}]]</a>
+        <a th:href="@{/news/new}">[[#{add_news}]]</a>
+    </div>
 </div>
 </body>
 </html>

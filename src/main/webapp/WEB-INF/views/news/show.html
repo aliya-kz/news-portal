@@ -7,15 +7,23 @@
 <body>
 <header th:insert="news/header.html :: header"> </header>
 
+<h3>[[#{title}]]</h3>
 <p th:text="${news.getTitle()}">VALUE</p>
-<p th:text="${news.getBrief()}">VALUE</p>
-<p th:text="${news.getContent()}">VALUE</p>
+
+<h3>[[#{date}]]</h3>
 <p th:text="${news.getDate()}">VALUE</p>
+
+<h3>[[#{title}]]</h3>
+<p th:text="${news.getBrief()}">VALUE</p>
+
+<h3>[[#{content}]]</h3>
+<p th:text="${news.getContent()}">VALUE</p>
+
 
 <a th:href="@{/news/{id}/edit(id=${news.getNews().getId()})}">[[#{edit}]]</a>
 
 <form th:method="DELETE" th:action="@{/news/{id}(id=${news.getId()})}">
-    <input type="submit" >[[#{delete}]]</input>
+    <button type="submit">[[#{delete}]]</button>
 </form>
 </body>
 </html>

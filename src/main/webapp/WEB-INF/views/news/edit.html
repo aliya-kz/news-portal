@@ -7,18 +7,23 @@
 <body>
 
 <form th:method="PATCH" th:action="@{/news/{id}/edit(id=${news.getNews().getId()})}" th:object="${news}">
-    <label for="title">Enter title: </label>
+    <label for="title">[[#{title}]] </label>
     <input type="text" th:field="*{title}" id="title"/>
     <div style="color:red" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title Error</div>
     <br/>
 
-    <label for="brief">Enter brief: </label>
-    <input type="text" th:field="*{brief}" id="brief"/>
+    <label for="date">[[#{date}]] </label>
+    <input type="date" th:field="*{date}" id="date"/>
+    <div style="color:red" th:if="${#fields.hasErrors('date')}" th:errors="*{date}">Date Error</div>
+    <br/>
+
+    <label for="brief">[[#{brief}]]  </label>
+    <textarea th:field="*{brief}" id="brief"></textarea>
     <div style="color:red" th:if="${#fields.hasErrors('brief')}" th:errors="*{brief}"> Brief Error</div>
     <br/>
 
-    <label for="content">Enter content: </label>
-    <input type="text" th:field="*{content}" id="content"/>
+    <label for="content">[[#{content}]] </label>
+    <textarea th:field="*{content}" id="content"></textarea>
     <div style="color:red" th:if="${#fields.hasErrors('content')}" th:errors="*{content}">Content Error</div>
     <br/>
 
