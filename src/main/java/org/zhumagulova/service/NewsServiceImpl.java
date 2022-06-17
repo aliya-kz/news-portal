@@ -1,6 +1,5 @@
 package org.zhumagulova.service;
 
-
 import org.apache.logging.log4j.LogManager;
 
 import org.apache.logging.log4j.Logger;
@@ -62,8 +61,13 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     @Transactional
-    public void updateNews(LocalizedNews news, long id) {
-        localizedNewsRepo.updateLocalizedNews(news);
+    public void updateNews(LocalizedNews localizedNews, long id) {
+        Language language = languageService.getLanguageByLocale();
+        localizedNews.setLanguage(language);
+        News news = new News();
+        news.setId(id);
+        localizedNews.setNews(news);
+        localizedNewsRepo.updateLocalizedNews(localizedNews);
     }
 
     @Override

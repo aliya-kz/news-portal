@@ -14,7 +14,7 @@ import java.time.LocalDate;
         @UniqueConstraint(columnNames={"news_id", "language_id"}))
 @NamedNativeQuery(
         name = "updateLocalizedNews",
-        query = "UPDATE localized_news ln set ln.title =? set ln.brief = ? set ln.content = ? where ln.id = ?",
+        query = "UPDATE localized_news set title =?, brief = ?, content = ? where news_id = ? and language_id = ?",
         resultClass=LocalizedNews.class
 )
 @NamedQuery(

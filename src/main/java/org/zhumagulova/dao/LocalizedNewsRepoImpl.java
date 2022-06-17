@@ -48,12 +48,12 @@ public class LocalizedNewsRepoImpl implements LocalizedNewsRepo {
     @Override
     public void updateLocalizedNews(LocalizedNews news) {
         Session session = sessionFactory.getCurrentSession();
-        logger.info("News updated "+ news);
         Query query = session.getNamedNativeQuery("updateLocalizedNews");
         query.setParameter(1, news.getTitle());
         query.setParameter(2, news.getBrief());
         query.setParameter(3, news.getContent());
-        query.setParameter(4, news.getId());
+        query.setParameter(4, news.getNews().getId());
+        query.setParameter(5, news.getLanguage().getId());
         query.executeUpdate();
     }
 

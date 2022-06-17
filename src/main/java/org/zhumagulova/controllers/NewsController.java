@@ -11,7 +11,6 @@ import org.zhumagulova.models.LocalizedNews;
 import org.zhumagulova.service.NewsService;
 
 import javax.validation.Valid;
-import java.sql.SQLException;
 import java.util.List;
 
 
@@ -37,7 +36,7 @@ public class NewsController {
     }
 
     @GetMapping("/{id}")
-    public String show(@PathVariable("id") int id, Model model) {
+    public String show(@PathVariable("id") long id, Model model) {
         LocalizedNews news = newsService.getNewsById(id);
         model.addAttribute("news", news);
         return "news/show";
@@ -49,9 +48,8 @@ public class NewsController {
     }
 
     @PostMapping
-    public String create(@ModelAttribute("news") @Valid LocalizedNews news,
+    public String create(@Valid @ModelAttribute("news") LocalizedNews news,
                          BindingResult bindingResult, @RequestParam String newsId) {
-        logger.info("printing newsId in controller:" + newsId);
         if (bindingResult.hasErrors()) {
             return "news/error";
         }
@@ -67,10 +65,8 @@ public class NewsController {
     }
 
     @PatchMapping("/{id}/edit")
-    public String update(@ModelAttribute("news") @Valid LocalizedNews news,
+    public String update(@Valid @ModelAttribute("news") LocalizedNews news,
                          BindingResult bindingResult, @PathVariable("id") long id) {
-        logger.info("printing patch id :" + id);
-        logger.info("printing patch news title :" + news.getTitle());
         if (bindingResult.hasErrors()) {
             return "news/edit";
         }
@@ -83,6 +79,7 @@ public class NewsController {
         newsService.delete(id);
         return "redirect:/news";
     }
+
 
     @ExceptionHandler(Exception.class)
     public String error() {
