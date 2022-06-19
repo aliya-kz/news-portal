@@ -10,8 +10,10 @@ import org.springframework.stereotype.Repository;
 import org.zhumagulova.models.Language;
 import org.zhumagulova.models.LocalizedNews;
 
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
+import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -32,7 +34,7 @@ public class LocalizedNewsRepoImpl implements LocalizedNewsRepo {
     @Override
     public List<LocalizedNews> getAllLocalizedNews(long languageId) {
         Session session = sessionFactory.getCurrentSession();
-        String hql = "select ln from LocalizedNews ln where ln.language.id = :langId";
+        String hql = "select ln from LocalizedNews ln where ln.language.id = :langId order by date(date) desc";
         Query query = session.createQuery(hql, LocalizedNews.class);
         query.setParameter("langId", languageId);
         List<LocalizedNews> results = query.list();
