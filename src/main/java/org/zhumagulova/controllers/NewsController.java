@@ -90,10 +90,8 @@ public class NewsController {
         return "redirect:/news";
     }
 
-/*
     @ExceptionHandler(PSQLException.class)
     public String error() {
         return "news/error";
     }
-    */
 }
