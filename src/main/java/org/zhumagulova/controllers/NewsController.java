@@ -2,7 +2,6 @@ package org.zhumagulova.controllers;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +11,7 @@ import org.zhumagulova.models.LocalizedNews;
 import org.zhumagulova.service.NewsService;
 
 import javax.validation.Valid;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -90,8 +90,10 @@ public class NewsController {
         return "redirect:/news";
     }
 
-    @ExceptionHandler(PSQLException.class)
+
+    @ExceptionHandler(SQLException.class)
     public String error() {
         return "news/error";
     }
+
 }
