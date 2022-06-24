@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>All news</title>
+    <script type="text/javascript" th:src="@{/js/script.js}"></script>
 </head>
 <body>
 <header th:insert="news/header.html :: header"> </header>
@@ -12,20 +13,21 @@
 
 <div th:each="news : ${all_news}">
     <div>
-        Id: <p th:text="${news.getNews().getId()}">Id</p>
+        Id: <p th:text="${news.getId()}">Id</p>
         <h2 th:text="${news.getTitle()}">[[#{title}]]</h2>
         <p th:text="${news.getBrief()}">[[#{brief}]]</p>
         <p th:text="${news.getDate()}">[[#{date}]]</p>
 
-        <a th:href="@{/news/{id}(id=${news.getNews().getId()})}">[[#{view}]]</a>
-        <a th:href="@{/news/{id}/edit(id=${news.getNews().getId()})}">[[#{edit}]]</a>
+        <a th:href="@{/news/{id}(id=${news.getId()})}">[[#{view}]]</a>
+        <a th:href="@{/news/{id}/edit(id=${news.getId()})}">[[#{edit}]]</a>
 
         <input type="checkbox" name="ids" th:value="${news.id}">
     </div>
     </br>
 
 </div>
-    <button type="submit">[[#{delete}]]</button>
+    <button type="submit" th:data-confirm-delete="|Are you sure you want to delete news?|"
+            onclick="if (!confirm(this.getAttribute('data-confirm-delete'))) return false" >[[#{delete}]]</button>
 </form>
 <br/>
 

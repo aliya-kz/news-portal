@@ -1,10 +1,10 @@
 package org.zhumagulova.models;
 
 
-import javax.persistence.*;
 import javax.validation.constraints.Size;
+
+import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Objects;
 import java.util.Set;
 
 
@@ -25,7 +25,7 @@ public class Language implements Serializable {
     private String code;
 
     @OneToMany(mappedBy="language")
-    private Set<LocalizedNews> localizedNewsSet;
+    private Set<News> localizedNewsSet;
 
     public Language() {}
 
@@ -49,11 +49,11 @@ public class Language implements Serializable {
         this.code = code;
     }
 
-    public Set<LocalizedNews> getLocalizedNewsSet() {
+    public Set<News> getLocalizedNewsSet() {
         return localizedNewsSet;
     }
 
-    public void setLocalizedNewsSet(Set<LocalizedNews> localizedNewsSet) {
+    public void setLocalizedNewsSet(Set<News> localizedNewsSet) {
         this.localizedNewsSet = localizedNewsSet;
     }
 

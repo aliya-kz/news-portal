@@ -5,8 +5,6 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
-import org.flywaydb.core.Flyway;
-import org.flywaydb.core.api.configuration.ClassicConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
@@ -30,7 +28,6 @@ public class JPAConfig {
     }
 
     @Bean(name = "sessionFactory")
-    @DependsOn("flyway")
     public LocalSessionFactoryBean sessionFactory() {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());
@@ -49,6 +46,9 @@ public class JPAConfig {
         hibernateProperties.setProperty("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
         hibernateProperties.setProperty("hibernate.show_sql", env.getProperty("hibernate.show_sql"));
         hibernateProperties.setProperty("hibernate.generate-ddl", env.getProperty("hibernate.generate-ddl"));
+        hibernateProperties.setProperty("hibernate.connection.CharSet", env.getProperty("hibernate.connection.CharSet"));
+        hibernateProperties.setProperty("hibernate.connection.characterEncoding", env.getProperty("hibernate.connection.characterEncoding"));
+        hibernateProperties.setProperty("hibernate.connection.useUnicode", env.getProperty("hibernate.connection.useUnicode"));
         return hibernateProperties;
     }
 
@@ -72,21 +72,5 @@ public class JPAConfig {
     @Bean
     public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
         return new PersistenceExceptionTranslationPostProcessor();
-    }
-
-    @Bean
-    ClassicConfiguration flywayConfiguration() {
-        ClassicConfiguration configuration = new ClassicConfiguration();
-        configuration.setDataSource(dataSource());
-        configuration.setDefaultSchema("public");
-        configuration.setLocationsAsStrings("classpath:/db/migration");
-        return configuration;
-    }
-
-    @Bean
-    Flyway flyway() {
-        Flyway flyway = new Flyway(flywayConfiguration());
-        flyway.migrate();
-        return flyway;
     }
 }

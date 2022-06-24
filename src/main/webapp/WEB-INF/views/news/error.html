@@ -5,14 +5,9 @@
     <title>Error page</title>
 </head>
 <body>
+<header th:insert="news/header.html :: header"> </header>
 
-<p> [[#{error_message}]]</p>
-
-<br/>
-<a href="/news/new"> [[#{new}]]</a>
-
-<br/>
-<a href="/news"> [[#{start_page}]]</a>
+<h2> [[#{${exception}}]]</h2>
 
 </body>
 </html>

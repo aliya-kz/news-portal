@@ -30,7 +30,7 @@
         <org.hamcrest.version>2.2</org.hamcrest.version>
         <flyway.version>8.5.13</flyway.version>
 
-
+        <flyway-maven-plugin.version>8.0.0</flyway-maven-plugin.version>
         <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
         <maven-resources-plugin.version>3.0.2</maven-resources-plugin.version>
         <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
@@ -164,6 +164,20 @@
         <finalName>news-portal-project</finalName>
         <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
             <plugins>
+                <plugin>
+                    <groupId>org.flywaydb</groupId>
+                    <artifactId>flyway-maven-plugin</artifactId>
+                    <version>8.0.0</version>
+                    <configuration>
+                        <user>postgres</user>
+                        <password>0604</password>
+                        <schemas>
+                            <schema>public</schema>
+                        </schemas>
+                        <url>jdbc:postgresql://localhost:5432/news_portal_updated</url>
+                    </configuration>
+                </plugin>
+
                 <plugin>
                     <artifactId>maven-clean-plugin</artifactId>
                     <version>${maven-clean-plugin.version}</version>
