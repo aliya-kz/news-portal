@@ -9,8 +9,8 @@ import java.io.Serializable;
 @Table(name = "news_duplicates")
 public class NewsDuplicate implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator="news_duplicates_seq_gen")
+    @SequenceGenerator(name="news_duplicates_seq_gen", sequenceName="news_duplicates_sequence", allocationSize = 1)
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)

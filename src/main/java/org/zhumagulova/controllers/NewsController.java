@@ -21,7 +21,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/news")
 
-public class NewsController {
+public class  NewsController {
 
     private static final Logger logger = LoggerFactory.getLogger(NewsController.class);
 
