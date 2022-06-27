@@ -10,10 +10,8 @@ import org.springframework.stereotype.Repository;
 import org.zhumagulova.models.Language;
 import org.zhumagulova.models.LocalizedNews;
 
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -48,7 +46,7 @@ public class LocalizedNewsRepoImpl implements LocalizedNewsRepo {
     }
 
     @Override
-    public void updateLocalizedNews(LocalizedNews news) {
+    public int updateLocalizedNews(LocalizedNews news) {
         Session session = sessionFactory.getCurrentSession();
         Query query = session.getNamedNativeQuery("updateLocalizedNews");
         query.setParameter(1, news.getTitle());
@@ -57,7 +55,7 @@ public class LocalizedNewsRepoImpl implements LocalizedNewsRepo {
         query.setParameter(4, news.getContent());
         query.setParameter(5, news.getNews().getId());
         query.setParameter(6, news.getLanguage().getId());
-        query.executeUpdate();
+        return query.executeUpdate();
     }
 
     @Override

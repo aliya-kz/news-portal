@@ -14,8 +14,11 @@ public interface NewsService {
 
     long createNews(LocalizedNews news, long newsId);
 
-    void updateNews(LocalizedNews news, long id);
+    int updateNews(LocalizedNews news, long id);
 
     @Transactional
     void delete(long id);
+
+    @Transactional
+    void deleteSeveral(String[] ids);
 }

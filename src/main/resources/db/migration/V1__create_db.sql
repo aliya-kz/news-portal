@@ -10,13 +10,13 @@ create table languages
 
 create table news
 (
-    id int8 not null,
+    id bigserial not null,
     primary key (id)
 );
 
 create table localized_news
 (
-    id          int8 not null,
+    id          bigserial not null,
     brief       varchar(500),
     content     varchar(2048),
     date        date,

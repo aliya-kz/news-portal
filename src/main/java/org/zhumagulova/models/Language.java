@@ -29,6 +29,10 @@ public class Language implements Serializable {
 
     public Language() {}
 
+    public Language(long id) {
+        this.id = id;
+    }
+
     public Language(String code) {
         this.code = code;
     }

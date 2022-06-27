@@ -1,9 +1,11 @@
 package org.zhumagulova.config;
 
+import javax.servlet.Filter;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
 
+import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
@@ -35,5 +37,13 @@ public class DispServletInitializer extends AbstractAnnotationConfigDispatcherSe
     private void registerHiddenFieldFilter(ServletContext aContext) {
         aContext.addFilter("hiddenHttpMethodFilter",
                 new HiddenHttpMethodFilter()).addMappingForUrlPatterns(null ,true, "/*");
+    }
+
+    @Override
+    protected Filter[] getServletFilters() {
+        CharacterEncodingFilter filter = new CharacterEncodingFilter();
+        filter.setEncoding("UTF-16");
+        filter.setForceEncoding(true);
+        return new Filter[] { filter };
     }
 }

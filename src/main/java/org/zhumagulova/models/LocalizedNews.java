@@ -1,5 +1,6 @@
 package org.zhumagulova.models;
 
+import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -7,6 +8,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Objects;
+
 
 @Entity
 @Table(name = "localized_news",
@@ -21,12 +24,13 @@ import java.time.LocalDate;
         name = "selectLocalizedNewsById",
         query = "select ln from LocalizedNews ln where ln.news.id = :id and ln.language.id= :langId"
 )
+@Data
 public class LocalizedNews implements Serializable {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO, generator="localized_news_seq_gen")
     @SequenceGenerator(name="localized_news_seq_gen", sequenceName="localized_news_sequence", allocationSize = 1)
-    private Long id;
+    private long id;
 
     @Column(name = "date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -56,60 +60,54 @@ public class LocalizedNews implements Serializable {
     public LocalizedNews() {
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public static class Builder {
+        private long id;
+        private LocalDate date;
+        private String brief;
+        private String title;
+        private String content;
+        private Language language;
+        private News news;
+
+        public Builder (String title, String brief, String content) {
+            this.title = title;
+            this.brief = brief;
+            this.content = content;
+        }
+
+        public Builder id (long value) {
+            id = value;
+            return this;
+        }
+
+        public Builder date (LocalDate value) {
+            date = value;
+            return this;
+        }
+
+        public Builder news (News value) {
+            news = value;
+            return this;
+        }
+        public Builder language (Language value) {
+            language = value;
+            return this;
+        }
+        public LocalizedNews build () {
+            return new LocalizedNews(this);
+        }
     }
 
-    public Long getId() {
-        return id;
-    }
 
-    public LocalDate getDate() {
-        return date;
-    }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getBrief() {
-        return brief;
-    }
-
-    public void setBrief(String brief) {
-        this.brief = brief;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public News getNews() {
-        return news;
-    }
-
-    public void setNews(News news) {
-        this.news = news;
-    }
-
-    public Language getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(Language language) {
-        this.language = language;
+    private LocalizedNews (Builder builder) {
+        id = builder.id;
+        date = builder.date;
+        title = builder.title;
+        brief = builder.brief;
+        content = builder.content;
+        language = builder.language;
+        news = builder.news;
     }
 
     @Override
@@ -122,5 +120,18 @@ public class LocalizedNews implements Serializable {
                 ", content='" + content + '\'' +
                 ", news=" + news +
                 ", language=" + language +'}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LocalizedNews that = (LocalizedNews) o;
+        return id == that.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

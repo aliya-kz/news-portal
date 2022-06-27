@@ -12,7 +12,7 @@ public interface LocalizedNewsRepo {
 
     long createLocalizedNews(LocalizedNews news, Language language);
 
-    void updateLocalizedNews(LocalizedNews news);
+    int updateLocalizedNews(LocalizedNews news);
 
     LocalizedNews getLocalizedNewsById(long id, long languageId);
 

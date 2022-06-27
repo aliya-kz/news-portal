@@ -1,18 +1,19 @@
 package org.zhumagulova.controllers;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.zhumagulova.models.LocalizedNews;
 import org.zhumagulova.service.NewsService;
 
+
 import javax.validation.Valid;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -21,7 +22,7 @@ import java.util.List;
 
 public class NewsController {
 
-    private static final Logger logger = LogManager.getLogger(NewsController.class);
+    private static final Logger logger = LoggerFactory.getLogger(NewsController.class);
 
     private final NewsService newsService;
 
@@ -49,13 +50,14 @@ public class NewsController {
         return "news/new";
     }
 
-    @PostMapping
+
+    @PostMapping("/new")
     public String create(@Valid @ModelAttribute("news") LocalizedNews news,
                          BindingResult bindingResult, @RequestParam String newsId) {
         if (bindingResult.hasErrors()) {
             return "news/error";
         }
-        long id = (newsId.length() < 1) ? 0 : Long.parseLong(newsId);
+        long id = StringUtils.hasText(newsId) ? Long.parseLong(newsId) : 0;
         newsService.createNews(news, id);
         return "redirect:/news";
     }
@@ -72,8 +74,8 @@ public class NewsController {
         if (bindingResult.hasErrors()) {
             return "news/edit";
         }
-        newsService.updateNews(news, id);
-        return "redirect:/news";
+        int result = newsService.updateNews(news, id);
+        return (result > 0 ) ? "redirect:/news" : "redirect:/news/error";
     }
 
     @DeleteMapping("/{id}")
@@ -85,8 +87,7 @@ public class NewsController {
     @DeleteMapping
     public String delete( @RequestParam String [] ids) {
         logger.info ("printing ids " + ids.length);
-        Arrays.stream(ids).map(Long::valueOf)
-                        .forEach(id->newsService.delete(id));
+        newsService.deleteSeveral(ids);
         return "redirect:/news";
     }
 

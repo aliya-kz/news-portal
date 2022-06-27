@@ -1,8 +1,8 @@
 package org.zhumagulova.service;
 
-import org.apache.logging.log4j.LogManager;
 
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,13 +12,14 @@ import org.zhumagulova.models.Language;
 import org.zhumagulova.models.LocalizedNews;
 import org.zhumagulova.models.News;
 
-
+import java.util.Arrays;
 import java.util.List;
+
 
 @Service
 public class NewsServiceImpl implements NewsService {
 
-    private static final Logger logger = LogManager.getLogger("NewsServiceImpl");
+    private static final Logger logger = LoggerFactory.getLogger("NewsServiceImpl");
 
     private final LocalizedNewsRepo localizedNewsRepo;
 
@@ -61,13 +62,13 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     @Transactional
-    public void updateNews(LocalizedNews localizedNews, long id) {
+    public int updateNews(LocalizedNews localizedNews, long id) {
         Language language = languageService.getLanguageByLocale();
         localizedNews.setLanguage(language);
         News news = new News();
         news.setId(id);
         localizedNews.setNews(news);
-        localizedNewsRepo.updateLocalizedNews(localizedNews);
+        return localizedNewsRepo.updateLocalizedNews(localizedNews);
     }
 
     @Override
@@ -76,4 +77,11 @@ public class NewsServiceImpl implements NewsService {
         localizedNewsRepo.deleteLocalizedNews(id);
     }
 
+
+    @Override
+    @Transactional
+    public void deleteSeveral(String[] ids) {
+        Arrays.stream(ids).map(Long::parseLong)
+                .forEach(id -> localizedNewsRepo.deleteLocalizedNews(id));
+    }
 }
