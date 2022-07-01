@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.zhumagulova.dao.LocalizedNewsRepo;
 import org.zhumagulova.dao.NewsRepo;
+import org.zhumagulova.exceptions.NewsAlreadyExistsException;
 import org.zhumagulova.models.Language;
 import org.zhumagulova.models.LocalizedNews;
 import org.zhumagulova.models.News;
@@ -50,7 +51,7 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     @Transactional
-    public long createNews(LocalizedNews localizedNews, long newsId) {
+    public long createNews(LocalizedNews localizedNews, long newsId) throws NewsAlreadyExistsException {
         News news = new News();
         newsId = (newsId == 0) ? newsRepo.createNews() : newsId;
         news.setId(newsId);

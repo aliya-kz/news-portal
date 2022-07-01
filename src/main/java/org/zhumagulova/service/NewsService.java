@@ -2,6 +2,7 @@ package org.zhumagulova.service;
 
 
 import org.springframework.transaction.annotation.Transactional;
+import org.zhumagulova.exceptions.NewsAlreadyExistsException;
 import org.zhumagulova.models.LocalizedNews;
 import java.util.List;
 
@@ -12,7 +13,7 @@ public interface NewsService {
 
     LocalizedNews getNewsById(long id);
 
-    long createNews(LocalizedNews news, long newsId);
+    long createNews(LocalizedNews news, long newsId) throws NewsAlreadyExistsException;
 
     int updateNews(LocalizedNews news, long id);
 

@@ -4,22 +4,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.zhumagulova.exceptions.NewsAlreadyExistsException;
 import org.zhumagulova.models.LocalizedNews;
 import org.zhumagulova.service.NewsService;
 
-
 import javax.validation.Valid;
-import java.sql.SQLException;
 import java.util.List;
 
 
 @Controller
 @RequestMapping("/news")
-
+@ActiveProfiles("test")
 public class NewsController {
 
     private static final Logger logger = LoggerFactory.getLogger(NewsController.class);
@@ -53,7 +53,7 @@ public class NewsController {
 
     @PostMapping("/new")
     public String create(@Valid @ModelAttribute("news") LocalizedNews news,
-                         BindingResult bindingResult, @RequestParam String newsId) {
+                         BindingResult bindingResult, @RequestParam String newsId) throws NewsAlreadyExistsException {
         if (bindingResult.hasErrors()) {
             return "news/error";
         }
@@ -75,26 +75,34 @@ public class NewsController {
             return "news/edit";
         }
         int result = newsService.updateNews(news, id);
-        return (result > 0 ) ? "redirect:/news" : "redirect:/news/error";
+        return (result > 0) ? "redirect:/news" : "redirect:/news/error";
     }
 
     @DeleteMapping("/{id}")
-    public String deleteOneNews( @PathVariable("id") long id) {
+    public String deleteOneNews(@PathVariable("id") long id) {
         newsService.delete(id);
         return "redirect:/news";
     }
 
     @DeleteMapping
-    public String delete( @RequestParam String [] ids) {
-        logger.info ("printing ids " + ids.length);
+    public String delete(@RequestParam String[] ids) {
+        // string to long
+        logger.info("printing ids " + ids.length);
+        //transfer to long
         newsService.deleteSeveral(ids);
         return "redirect:/news";
     }
 
 
-    @ExceptionHandler(SQLException.class)
+   /* @ExceptionHandler(SQLException.class)
     public String error() {
         return "news/error";
-    }
+    }*/
 
+    @ExceptionHandler(value = NewsAlreadyExistsException.class)
+    public String newsAlreadyExist(Model model, NewsAlreadyExistsException exception) {
+        model.addAttribute("errormessage", exception.getMessage());
+        logger.info("printing exception " + exception.getClass());
+        return "news/error";
+    }
 }

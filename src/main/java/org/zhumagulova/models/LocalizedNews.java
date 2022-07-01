@@ -1,6 +1,6 @@
 package org.zhumagulova.models;
 
-import lombok.Data;
+
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -24,7 +24,7 @@ import java.util.Objects;
         name = "selectLocalizedNewsById",
         query = "select ln from LocalizedNews ln where ln.news.id = :id and ln.language.id= :langId"
 )
-@Data
+
 public class LocalizedNews implements Serializable {
 
     @Id
@@ -133,5 +133,61 @@ public class LocalizedNews implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getBrief() {
+        return brief;
+    }
+
+    public void setBrief(String brief) {
+        this.brief = brief;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public News getNews() {
+        return news;
+    }
+
+    public void setNews(News news) {
+        this.news = news;
+    }
+
+    public Language getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(Language language) {
+        this.language = language;
     }
 }

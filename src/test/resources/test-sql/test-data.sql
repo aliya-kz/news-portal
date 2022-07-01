@@ -2,7 +2,12 @@ alter sequence news_sequence restart with 1;
 alter sequence localized_news_sequence restart with 1;
 
 delete from localized_news;
-delete from news ;
+delete from news;
+delete from languages;
+
+insert into languages (id, code)
+values (1, 'en'),
+       (2, 'ru');
 
 insert into news (id)
 values (nextval('news_sequence'));

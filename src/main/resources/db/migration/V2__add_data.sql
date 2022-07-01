@@ -7,5 +7,3 @@ values (nextval('news_sequence'));
 
 insert into news (id)
 values (nextval('news_sequence'));
-
-

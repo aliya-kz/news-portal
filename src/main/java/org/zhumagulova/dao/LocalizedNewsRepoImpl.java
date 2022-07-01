@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.zhumagulova.exceptions.NewsAlreadyExistsException;
 import org.zhumagulova.models.Language;
 import org.zhumagulova.models.LocalizedNews;
 
@@ -39,10 +40,11 @@ public class LocalizedNewsRepoImpl implements LocalizedNewsRepo {
         return results;
     }
 
-    public long createLocalizedNews(LocalizedNews news, Language language) {
+    public long createLocalizedNews(LocalizedNews news, Language language) throws NewsAlreadyExistsException {
         Session session = sessionFactory.getCurrentSession();
         news.setLanguage(language);
         return (long) session.save(news);
+
     }
 
     @Override

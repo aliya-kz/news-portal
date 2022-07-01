@@ -2,81 +2,103 @@ package org.zhumagulova.service;
 
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.test.context.TestPropertySource;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.zhumagulova.dao.LocalizedNewsRepo;
-import org.zhumagulova.dao.NewsRepo;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.zhumagulova.config.JPATestConfig;
+import org.zhumagulova.exceptions.NewsAlreadyExistsException;
 import org.zhumagulova.models.Language;
 import org.zhumagulova.models.LocalizedNews;
-import org.zhumagulova.models.News;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.NoSuchElementException;
 
-import static org.mockito.Mockito.when;
-import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
+import static org.junit.jupiter.api.Assertions.*;
 
-
-@TestPropertySource("/application-test.properties")
-@Sql(scripts = "/test-sql/create-db.sql", executionPhase = BEFORE_TEST_METHOD)
-@RunWith(SpringJUnit4ClassRunner.class)
+@PropertySource("/connection-test.properties")
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {JPATestConfig.class})
+@ActiveProfiles("test")
+@Sql(value = "classpath:test-sql/test-data.sql", executionPhase = Sql.ExecutionPhase
+        .BEFORE_TEST_METHOD)
 class NewsServiceImplTest {
 
-    private final static long ID = 1L;
+    private final static long EXISTING_LANGUAGE_ID = 1;
+    private final static long EXISTING_LOCALIZED_NEWS_ID = 1;
+    private final static long NON_EXISTING_LOCALIZED_NEWS_ID = 17;
+    private final static long LOCALIZED_NEWS_OF_SINGLE_LANGUAGE_LIST_SIZE = 2;
+    private final static long EXISTING_NEWS_ID = 1;
+    private final static long DEFAULT_NEWS_ID=0;
+    private final static String TITLE = "Test title";
+    private final static String BRIEF = "Test brief";
+    private final static String CONTENT = "Test content";
 
-    @Mock
-    private NewsRepo newsRepo;
+     @Autowired
+    private NewsService newsService;
 
-    @Mock
-    private LocalizedNewsRepo localizedNewsRepo;
-
-    @Mock
-    private LanguageService languageService;
-
-    @InjectMocks
-    private NewsServiceImpl newsService;
-
-    private MockMvc mockMvc;
-
-    @BeforeEach
-    public void setup() {
-        MockitoAnnotations.openMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(newsService).build();
+    @Test
+    public void getLocalizedNewsById_NewsExist_True() {
+        LocalizedNews news = newsService.getNewsById(EXISTING_LOCALIZED_NEWS_ID);
+        Assertions.assertNotNull(news);
     }
 
     @Test
-    public void testGetLocalizedNewsById() {
-        LocalizedNews localizedNews = new LocalizedNews.Builder("title", "brief", "content")
-                .news(new News(ID)).language(new Language(ID)).date(LocalDate.now()).build();
-
-        when(languageService.getLanguageIdByLocale()).thenReturn(ID);
-        when(localizedNewsRepo.getLocalizedNewsById(ID, ID)).thenReturn(localizedNews);
-
-        LocalizedNews actual = newsService.getNewsById(ID);
-
-        Assertions.assertNotNull(actual);
-        Assertions.assertEquals(localizedNews, actual);
+    public void getLocalizedNewsById_NewsNotExist_ThrowsException() {
+        assertThrows(NoSuchElementException.class, () -> newsService.getNewsById(NON_EXISTING_LOCALIZED_NEWS_ID));
     }
 
     @Test
-    public void createNews() {
-        LocalizedNews localizedNews = new LocalizedNews.Builder("title ", "brief", "content")
-                .news(new News(ID)).language(new Language(ID)).date(LocalDate.now()).build();
-        Language language = new Language(ID);
-
-        when(languageService.getLanguageByLocale()).thenReturn(language);
-        when(newsRepo.createNews()).thenReturn(ID);
-        when(localizedNewsRepo.createLocalizedNews(localizedNews, language)).thenReturn(5L);
-
-        long id = newsService.createNews(localizedNews, 0);
-        Assertions.assertEquals(id, 5);
+    public void getAllNews_NewsSizeEqualsFour_True() {
+        List <LocalizedNews> list = newsService.getAllNews();
+        assertEquals(LOCALIZED_NEWS_OF_SINGLE_LANGUAGE_LIST_SIZE, list.size());
     }
+
+    @Test
+    public void getAllNews_NewsSizeEqualsSeven_False() {
+        List <LocalizedNews> list = newsService.getAllNews();
+        assertNotEquals(7, LOCALIZED_NEWS_OF_SINGLE_LANGUAGE_LIST_SIZE);
+    }
+
+    @Test
+    public void createNews_Success_True() throws NewsAlreadyExistsException {
+        Language language = new Language(EXISTING_LANGUAGE_ID);
+        LocalizedNews localizedNews = new LocalizedNews.Builder(TITLE, BRIEF, CONTENT)
+                .date(LocalDate.now())
+                .language(language)
+                .build();
+
+        long id = newsService.createNews(localizedNews, DEFAULT_NEWS_ID);
+        assertTrue(id > 0);
+    }
+
+    @Test
+    public void createNews_NewsWithIdAndLanguageAlreadyExist_ThrowsException() throws DataIntegrityViolationException {
+        Language language = new Language(EXISTING_LANGUAGE_ID);
+        LocalizedNews localizedNews = new LocalizedNews.Builder(TITLE, BRIEF, CONTENT)
+                .date(LocalDate.now())
+                .language(language)
+                .build();
+
+        assertThrows(DataIntegrityViolationException.class, () -> newsService.createNews(localizedNews, EXISTING_NEWS_ID));
+    }
+
+    @Test
+    public void updateNews_Success_True() {
+        Language language = new Language(EXISTING_LANGUAGE_ID);
+        LocalizedNews localizedNews = new LocalizedNews.Builder(TITLE, BRIEF, CONTENT)
+                .date(LocalDate.now())
+                .language(language)
+                .build();
+
+        long numberOfRowsUpdated = newsService.updateNews(localizedNews, EXISTING_NEWS_ID);
+        assertTrue(numberOfRowsUpdated > 0);
+    }
+
 }

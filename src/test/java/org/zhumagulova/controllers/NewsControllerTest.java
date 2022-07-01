@@ -2,14 +2,19 @@ package org.zhumagulova.controllers;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.zhumagulova.config.JPATestConfig;
 import org.zhumagulova.models.LocalizedNews;
 import org.zhumagulova.models.News;
 import org.zhumagulova.service.NewsService;
@@ -26,8 +31,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
-
-@RunWith(SpringRunner.class)
+@ContextConfiguration(classes = {JPATestConfig.class})
+@ActiveProfiles("test")
+@ExtendWith(SpringExtension.class)
 class NewsControllerTest {
 
     @Mock
@@ -85,7 +91,6 @@ class NewsControllerTest {
         mockMvc.perform(post("/news/new")
                         .param("newsId", String.valueOf(1))
                         .contentType(MediaType.TEXT_HTML))
-                .andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/news"));
     }

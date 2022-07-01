@@ -1,5 +1,6 @@
 package org.zhumagulova.dao;
 
+import org.zhumagulova.exceptions.NewsAlreadyExistsException;
 import org.zhumagulova.models.Language;
 import org.zhumagulova.models.LocalizedNews;
 
@@ -10,7 +11,7 @@ public interface LocalizedNewsRepo {
 
     List<LocalizedNews> getAllLocalizedNews(long languageId);
 
-    long createLocalizedNews(LocalizedNews news, Language language);
+    long createLocalizedNews(LocalizedNews news, Language language) throws NewsAlreadyExistsException;
 
     int updateLocalizedNews(LocalizedNews news);
 

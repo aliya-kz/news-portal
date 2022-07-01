@@ -34,6 +34,7 @@ public class LanguageServiceImpl implements LanguageService {
         return languageRepo.getAll();
     }
 
+    @Transactional
     @Override
     public Language getLanguageByLocale() {
         Locale locale = LocaleContextHolder.getLocale();
