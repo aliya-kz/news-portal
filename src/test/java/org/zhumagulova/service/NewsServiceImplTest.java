@@ -22,13 +22,15 @@ import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
 @PropertySource("/connection-test.properties")
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {JPATestConfig.class})
 @ActiveProfiles("test")
 @Sql(value = "classpath:test-sql/test-data.sql", executionPhase = Sql.ExecutionPhase
         .BEFORE_TEST_METHOD)
-class NewsServiceImplTest {
+
+class NewsServiceImplTest extends BaseIntegrationTest {
 
     private final static long EXISTING_LANGUAGE_ID = 1;
     private final static long EXISTING_LOCALIZED_NEWS_ID = 1;
@@ -39,6 +41,7 @@ class NewsServiceImplTest {
     private final static String TITLE = "Test title";
     private final static String BRIEF = "Test brief";
     private final static String CONTENT = "Test content";
+
 
      @Autowired
     private NewsService newsService;
@@ -63,7 +66,7 @@ class NewsServiceImplTest {
     @Test
     public void getAllNews_NewsSizeEqualsSeven_False() {
         List <LocalizedNews> list = newsService.getAllNews();
-        assertNotEquals(7, LOCALIZED_NEWS_OF_SINGLE_LANGUAGE_LIST_SIZE);
+        assertNotEquals(7, list.size());
     }
 
     @Test

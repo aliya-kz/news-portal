@@ -16,8 +16,8 @@ import java.util.Properties;
 @Configuration
 @EnableTransactionManagement
 @PropertySource("/connection-test.properties")
-@ComponentScan (basePackages = {"org.zhumagulova"},
-        excludeFilters = { @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Configuration.class) })
+@ComponentScan(basePackages = {"org.zhumagulova"},
+        excludeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, value = Configuration.class)})
 
 public class JPATestConfig {
 
@@ -71,8 +71,5 @@ public class JPATestConfig {
     public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
         return new PersistenceExceptionTranslationPostProcessor();
     }
-
-
-
 }
 

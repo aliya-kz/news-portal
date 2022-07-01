@@ -22,19 +22,19 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @ExtendWith({SpringExtension.class})
 @ContextConfiguration(classes = JPATestConfig.class)
 @ActiveProfiles("test")
-
-
-class LanguageServiceImplTest {
+@Testcontainers
+class LanguageServiceImplTest extends BaseIntegrationTest {
 
     @Autowired
     private LanguageService languageService;
-
 
     @Sql(value = "classpath:test-sql/test-data.sql", executionPhase = Sql.ExecutionPhase
             .BEFORE_TEST_METHOD)
     @Test
     void getLanguageIdByLocale_LanguageExists_true() {
+
         assertNotNull(languageService.getLanguageByLocale());
+        System.out.println(languageService.getLanguageByLocale().getCode());
     }
 
     @Test
