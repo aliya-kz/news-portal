@@ -23,7 +23,9 @@
 <a th:href="@{/news/{id}/edit(id=${news.getNews().getId()})}">[[#{edit}]]</a>
 
 <form th:method="DELETE" th:action="@{/news/{id}(id=${news.getId()})}">
-    <button type="submit">[[#{delete}]]</button>
+    <button type="submit" th:data-confirm-delete="|Are you sure ypu want to delete news?|"
+            onclick="if (!confirm(this.getAttribute('data-confirm-delete'))) return false" >[[#{delete}]]</button>
+</form>
 </form>
 </body>
 </html>

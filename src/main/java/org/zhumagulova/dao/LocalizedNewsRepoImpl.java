@@ -1,11 +1,13 @@
 package org.zhumagulova.dao;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Repository;
 import org.zhumagulova.exceptions.NewsAlreadyExistsException;
 import org.zhumagulova.models.Language;
@@ -40,11 +42,10 @@ public class LocalizedNewsRepoImpl implements LocalizedNewsRepo {
         return results;
     }
 
-    public long createLocalizedNews(LocalizedNews news, Language language) throws NewsAlreadyExistsException {
+    public long createLocalizedNews(LocalizedNews news, Language language) {
         Session session = sessionFactory.getCurrentSession();
         news.setLanguage(language);
         return (long) session.save(news);
-
     }
 
     @Override

@@ -57,7 +57,11 @@ public class NewsServiceImpl implements NewsService {
         news.setId(newsId);
         localizedNews.setNews(news);
         Language language = languageService.getLanguageByLocale();
-        return localizedNewsRepo.createLocalizedNews(localizedNews, language);
+        try {
+            return localizedNewsRepo.createLocalizedNews(localizedNews, language);
+        } catch (Exception e) {
+            throw new NewsAlreadyExistsException("news_exist");
+        }
     }
 
 
@@ -81,8 +85,7 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     @Transactional
-    public void deleteSeveral(String[] ids) {
-        Arrays.stream(ids).map(Long::parseLong)
-                .forEach(id -> localizedNewsRepo.deleteLocalizedNews(id));
+    public void deleteSeveral(Long[] ids) {
+        Arrays.stream(ids).forEach(id -> localizedNewsRepo.deleteLocalizedNews(id));
     }
 }

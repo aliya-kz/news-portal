@@ -4,6 +4,7 @@ package org.zhumagulova.service;
 import org.springframework.transaction.annotation.Transactional;
 import org.zhumagulova.exceptions.NewsAlreadyExistsException;
 import org.zhumagulova.models.LocalizedNews;
+
 import java.util.List;
 
 
@@ -21,5 +22,5 @@ public interface NewsService {
     void delete(long id);
 
     @Transactional
-    void deleteSeveral(String[] ids);
+    void deleteSeveral(Long[] ids);
 }

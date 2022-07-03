@@ -1,5 +1,5 @@
-alter sequence news_sequence restart with 1;
-alter sequence localized_news_sequence restart with 1;
+alter sequence if exists news_sequence restart with 1;
+alter sequence if exists localized_news_sequence restart with 1;
 
 delete from localized_news;
 delete from news;

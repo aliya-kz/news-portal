@@ -8,6 +8,10 @@ private final String message = "news_exist";
         super(message);
     }
 
+    public NewsAlreadyExistsException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
     @Override
     public String getMessage() {
         return message;

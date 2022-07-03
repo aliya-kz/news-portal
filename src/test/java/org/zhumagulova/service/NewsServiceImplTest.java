@@ -3,15 +3,9 @@ package org.zhumagulova.service;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.zhumagulova.config.JPATestConfig;
 import org.zhumagulova.exceptions.NewsAlreadyExistsException;
 import org.zhumagulova.models.Language;
 import org.zhumagulova.models.LocalizedNews;
@@ -23,10 +17,6 @@ import java.util.NoSuchElementException;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-@PropertySource("/connection-test.properties")
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {JPATestConfig.class})
-@ActiveProfiles("test")
 @Sql(value = "classpath:test-sql/test-data.sql", executionPhase = Sql.ExecutionPhase
         .BEFORE_TEST_METHOD)
 

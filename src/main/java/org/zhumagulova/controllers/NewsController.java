@@ -3,6 +3,7 @@ package org.zhumagulova.controllers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.ui.Model;
@@ -14,7 +15,9 @@ import org.zhumagulova.models.LocalizedNews;
 import org.zhumagulova.service.NewsService;
 
 import javax.validation.Valid;
+import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 
 @Controller
@@ -86,23 +89,22 @@ public class NewsController {
 
     @DeleteMapping
     public String delete(@RequestParam String[] ids) {
-        // string to long
-        logger.info("printing ids " + ids.length);
-        //transfer to long
-        newsService.deleteSeveral(ids);
+        Long[] newsIds = Arrays.stream(ids).map(id->Long.parseLong(id)).toArray(Long[]::new);
+        newsService.deleteSeveral(newsIds);
         return "redirect:/news";
     }
 
 
-   /* @ExceptionHandler(SQLException.class)
-    public String error() {
-        return "news/error";
-    }*/
-
-    @ExceptionHandler(value = NewsAlreadyExistsException.class)
-    public String newsAlreadyExist(Model model, NewsAlreadyExistsException exception) {
-        model.addAttribute("errormessage", exception.getMessage());
-        logger.info("printing exception " + exception.getClass());
+    @ExceptionHandler(value = NoSuchElementException.class)
+    public String noSuchElement(Model model) {
+        model.addAttribute("error_msg", "no_element");
         return "news/error";
     }
+
+    @ExceptionHandler(NewsAlreadyExistsException.class)
+    public String newsAlreadyExist (Model model) {
+        model.addAttribute("error_msg", "news_exist");
+        return "news/error";
+    }
+
 }
