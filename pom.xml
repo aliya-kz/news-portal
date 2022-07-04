@@ -206,12 +206,7 @@
                     <artifactId>flyway-maven-plugin</artifactId>
                     <version>${flyway-maven-plugin.version}</version>
                     <configuration>
-                        <user>postgres</user>
-                        <url>jdbc:postgresql://localhost:5432/news_portal</url>
-                        <password>0604</password>
-                        <schemas>
-                            <schema>public</schema>
-                        </schemas>
+                        <configFiles>/src/main/resources/flyway.properties</configFiles>
                     </configuration>
                 </plugin>
                 <plugin>

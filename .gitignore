@@ -6,3 +6,4 @@ log/
 *.class
 .idea
 *.iml
+flyway.properties

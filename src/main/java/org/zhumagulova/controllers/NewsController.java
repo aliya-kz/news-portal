@@ -22,7 +22,6 @@ import java.util.NoSuchElementException;
 
 @Controller
 @RequestMapping("/news")
-@ActiveProfiles("test")
 public class NewsController {
 
     private static final Logger logger = LoggerFactory.getLogger(NewsController.class);
